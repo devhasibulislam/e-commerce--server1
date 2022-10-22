@@ -110,3 +110,35 @@ exports.signInAnUser = async (req, res, next) => {
     next(error);
   }
 };
+
+/* retain a user after login based token expiry */
+exports.getMe = async (req, res, next) => {
+  try {
+    const result = await User.findOne({ email: req.user.email });
+
+    res.status(200).json({
+      acknowledgement: true,
+      message: "User retained",
+      description: "User logged in already",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* display all users */
+exports.displayAllUsers = async (req, res, next) => {
+  try {
+    const result = await User.find();
+
+    res.status(200).json({
+      acknowledgement: true,
+      message: "Fetching complete",
+      description: "Successfully fetch all users from DB",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
