@@ -5,6 +5,9 @@
  * Date: 22/10/2022
  */
 
+/* external import */
+const bcrypt = require("bcryptjs");
+
 /* internal imports */
 const User = require("../models/User");
 const sendConfirmationEmail = require("../utilities/confirmEmail.utility");
@@ -17,7 +20,13 @@ exports.signUpAnUser = async (req, res, next) => {
     const token = user.generateConfirmationToken();
 
     await user.save({ validateBeforeSave: false });
-    sendConfirmationEmail(user.email, token, req.protocol, req.get("host"));
+    sendConfirmationEmail(
+      user.email,
+      token,
+      req.protocol,
+      req.get("host"),
+      "signup"
+    );
 
     res.status(201).json({
       acknowledgement: true,
@@ -137,6 +146,74 @@ exports.displayAllUsers = async (req, res, next) => {
       message: "Fetching complete",
       description: "Successfully fetch all users from DB",
       data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* reset password */
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    const token = user.generateResetToken();
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+    const result = await User.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { password: hashedPassword } },
+      { runValidators: true }
+    );
+
+    user.status = "inactive";
+
+    await user.save({ validateBeforeSave: false });
+    sendConfirmationEmail(
+      user.email,
+      token,
+      req.protocol,
+      req.get("host"),
+      "forgot"
+    );
+
+    res.status(202).json({
+      acknowledgement: true,
+      message: "Password reset",
+      description: "Successfully reset password, from now use new one",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* confirm password reset */
+exports.confirmPasswordReset = async (req, res, next) => {
+  try {
+    const token = req.query.token;
+    const user = await User.findOne({ passwordResetToken: token });
+    const expired = new Date() > new Date(user.passwordResetTokenExpires);
+
+    if (expired) {
+      return res.status(401).json({
+        acknowledgement: false,
+        message: "Unauthorized",
+        description: "The token provided by email is expired, retry",
+      });
+    }
+
+    user.status = "active";
+    user.passwordChangedAt = Date.now();
+    user.passwordResetToken = undefined;
+    user.passwordResetTokenExpires = undefined;
+    user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      acknowledgement: true,
+      message: "Password reset",
+      description: "Password reset now, try new",
     });
   } catch (error) {
     next(error);
