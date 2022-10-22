@@ -62,3 +62,14 @@ Upload an avatar that is less than or equal `1MB`
 ```
 
 ---
+
+- **Forgot password** - `{{URL_8080}}user/forgot`
+
+```bash
+{
+    "email": "hasib143sl@gmail.com",
+    "password": "Hasib@123#Islam"
+}
+```
+
+---
