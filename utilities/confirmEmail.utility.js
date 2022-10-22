@@ -8,7 +8,7 @@
 /* external import */
 const nodemailer = require("nodemailer");
 
-function sendConfirmationEmail(userEmail, token, protocol, host) {
+function sendConfirmationEmail(userEmail, token, protocol, host, flag) {
   const transporter = nodemailer.createTransport({
     service: process.env.APP_SERVICE,
     auth: {
@@ -22,7 +22,7 @@ function sendConfirmationEmail(userEmail, token, protocol, host) {
     to: userEmail,
     subject: "Validation code to confirm registration",
     text: `Thank you for sign up.
-    Please, confirm your account here: ${protocol}://${host}/user/signup?token=${token}`,
+    Please, confirm your account here: ${protocol}://${host}/user/${flag}?token=${token}`,
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
