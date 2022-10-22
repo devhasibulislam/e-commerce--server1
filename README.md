@@ -49,8 +49,8 @@ Approach the Bearer Token that generated after `Sign in` which going to be displ
 - **Display all users** - `{{URL_8080}}user/all`
 
 ```bash
-    * Approach the Bearer Token that generated after `Sign in` which going to be displayed.
-    * Only visible to `Admin` only
+    # Approach the Bearer Token that generated after `Sign in` which going to be displayed.
+    # Only visible to `Admin` only
 ```
 
 ---
@@ -58,7 +58,7 @@ Approach the Bearer Token that generated after `Sign in` which going to be displ
 - **Upload user avatar** - `{{URL_8080}}user/avatar`
 
 ```bash
-Upload an avatar that is less than or equal 1MB.
+Upload an avatar that is less than or equal `1MB`
 ```
 
 ---
