@@ -10,6 +10,8 @@ const express = require("express");
 
 /* internal import */
 const userController = require("../controllers/user.controller");
+const authorizationMiddleware = require("../middlewares/authorization.middleware");
+const verifyTokenMiddleware = require("../middlewares/verifyToken.middleware");
 
 /* router level connection */
 const router = express.Router();
@@ -20,6 +22,13 @@ router
   .get(userController.confirmSignedUpUser)
   .post(userController.signUpAnUser);
 router.post("/signin", userController.signInAnUser);
+router.get("/me", verifyTokenMiddleware, userController.getMe);
+router.get(
+  "/all",
+  verifyTokenMiddleware,
+  authorizationMiddleware("admin"),
+  userController.displayAllUsers
+);
 
 /* export user router */
 module.exports = router;
