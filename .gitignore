@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Environmental variables for secret credentials
 .env
+
+# Uploaded images
+uploads/
