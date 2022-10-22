@@ -22,7 +22,7 @@ function sendConfirmationEmail(userEmail, token, protocol, host) {
     to: userEmail,
     subject: "Validation code to confirm registration",
     text: `Thank you for sign up.
-    Please, confirm your account here: ${protocol}://${host}/user?token=${token}`,
+    Please, confirm your account here: ${protocol}://${host}/user/signup?token=${token}`,
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
