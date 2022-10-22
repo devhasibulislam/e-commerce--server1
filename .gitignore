@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Environmental variables for secret credentials
+.env
+
+# Uploaded images
+uploads/
