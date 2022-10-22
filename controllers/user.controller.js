@@ -8,6 +8,7 @@
 /* internal imports */
 const User = require("../models/User");
 const sendConfirmationEmail = require("../utilities/confirmEmail.utility");
+const { getToken } = require("../utilities/token.utility");
 
 /* sign up an user */
 exports.signUpAnUser = async (req, res, next) => {
@@ -34,14 +35,76 @@ exports.signUpAnUser = async (req, res, next) => {
   }
 };
 
+/* confirm signed up user */
+exports.confirmSignedUpUser = async (req, res, next) => {
+  try {
+    const token = req.query.token;
+    const user = await User.findOne({ confirmationToken: token });
+    const expired = new Date() > new Date(user.confirmationTokenExpires);
+
+    if (expired) {
+      return res.status(401).json({
+        acknowledgement: false,
+        message: "Unauthorized",
+        description: "The token provided by email is expired, retry",
+      });
+    }
+
+    user.status = "active";
+    user.confirmationToken = undefined;
+    user.confirmationTokenExpires = undefined;
+    user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      acknowledgement: true,
+      message: "Account activated",
+      description: "Welcome to our website, you are ready to explore",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 /* sign in an user */
 exports.signInAnUser = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({
+        acknowledgement: false,
+        message: "Not Found",
+        description: "User not found",
+      });
+    }
+
+    const isPasswordValid = user.comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(406).json({
+        acknowledgement: false,
+        message: "Not Acceptable",
+        description: "Password won't match retry or forgot",
+      });
+    }
+
+    if (user.status !== "active") {
+      return res.status(401).json({
+        acknowledgement: false,
+        message: "Unauthorized",
+        description: "Account is not activated, verify first",
+      });
+    }
+
+    const token = getToken(user);
+    const { password: pw, ...others } = user.toObject();
+
     res.status(202).json({
       acknowledgement: true,
       message: "Accepted",
       description: "New user login complete",
-      data: result,
+      data: others,
+      token,
     });
   } catch (error) {
     next(error);
