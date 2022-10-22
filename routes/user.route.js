@@ -15,7 +15,10 @@ const userController = require("../controllers/user.controller");
 const router = express.Router();
 
 /* router methods integration */
-router.post("/signup", userController.signUpAnUser);
+router
+  .route("/signup")
+  .get(userController.confirmSignedUpUser)
+  .post(userController.signUpAnUser);
 router.post("/signin", userController.signInAnUser);
 
 /* export user router */
