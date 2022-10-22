@@ -13,6 +13,7 @@ const cors = require("cors");
 const errorHandler = require("./middlewares/error.middleware");
 
 /* router level imports */
+const userRoute = require("./routes/user.route");
 
 /* application level connections */
 const app = express();
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 /* router level connections */
+app.use("/user", userRoute);
 
 /* global error handlers */
 app.use(errorHandler);
@@ -39,7 +41,7 @@ app.get("/", (req, res) => {
     res.status(204).json({
       acknowledgement: false,
       message: error.name,
-      description: error.message
+      description: error.message,
     });
   }
 });

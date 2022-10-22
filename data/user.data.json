@@ -1,0 +1,17 @@
+[
+  {
+    "fullName": "Hasibul Islam",
+    "email": "hasib143sl@gmail.com",
+    "password": "Hasib@123",
+    "confirmPassword": "Hasib@123",
+    "contactNumber": "+8801356215901",
+    "role": "admin"
+  },
+  {
+    "fullName": "Rashedul Rahat",
+    "email": "skillnao03@gmail.com",
+    "password": "Rashed@123",
+    "confirmPassword": "Rashed@123",
+    "contactNumber": "+8801356215901"
+  }
+]
