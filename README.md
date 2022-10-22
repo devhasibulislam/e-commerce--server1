@@ -49,7 +49,8 @@ Approach the Bearer Token that generated after `Sign in` which going to be displ
 - **Display all users** - `{{URL_8080}}user/all`
 
 ```bash
-Approach the Bearer Token that generated after `Sign in` which going to be displayed.
+    * Approach the Bearer Token that generated after `Sign in` which going to be displayed.
+    * Only visible to `Admin` only
 ```
 
 ---
