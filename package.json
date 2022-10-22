@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Reinvent your needs through out our ecommerce website.",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "development": "NODE_ENV=development nodemon server",
     "production": "NODE_ENV=production node server"
