@@ -181,6 +181,20 @@ userSchema.methods.generateConfirmationToken = function () {
   return token;
 };
 
+/* generate new password reset token */
+userSchema.methods.generateResetToken = function () {
+  const token = crypto.randomBytes(8).toString("hex");
+
+  this.passwordResetToken = token;
+
+  const date = new Date();
+
+  date.setDate(date.getDate() + 1);
+  this.passwordResetTokenExpires = date;
+
+  return token;
+};
+
 /* create user model */
 const User = mongoose.model("User", userSchema);
 
