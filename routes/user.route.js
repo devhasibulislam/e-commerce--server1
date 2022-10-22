@@ -18,18 +18,22 @@ const verifyTokenMiddleware = require("../middlewares/verifyToken.middleware");
 const router = express.Router();
 
 /* router methods integration */
-router.post("/avatar", avatarUpload.single("avatar"), async (req, res, next) => {
-  try {
-    res.status(201).json({
-      acknowledgement: true,
-      message: "Created",
-      description: "Avatar successfully uploaded",
-      data: req.file,
-    });
-  } catch (error) {
-    next(error);
+router.post(
+  "/avatar",
+  avatarUpload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      res.status(201).json({
+        acknowledgement: true,
+        message: "Created",
+        description: "Avatar successfully uploaded",
+        data: req.file,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 router
   .route("/signup")
   .get(userController.confirmSignedUpUser)
@@ -42,6 +46,10 @@ router.get(
   authorizationMiddleware("admin"),
   userController.displayAllUsers
 );
+router
+  .route("/forgot")
+  .get(userController.confirmPasswordReset)
+  .patch(userController.forgotPassword);
 
 /* export user router */
 module.exports = router;
