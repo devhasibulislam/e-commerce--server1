@@ -31,15 +31,15 @@ app.get("/", (req, res) => {
   try {
     res.status(200).json({
       acknowledgement: true,
-      message: "OK",
-      description: "The request is OK",
+      message: "Establishing server connection complete",
+      description:
+        "The request is processing well & returning success message E-Commerce project",
     });
   } catch (error) {
     res.status(204).json({
       acknowledgement: false,
-      message: "No Content",
-      description:
-        "The request has been successfully processed, but is not returning any content",
+      message: error.name,
+      description: error.message
     });
   }
 });
