@@ -16,6 +16,7 @@ const errorHandler = require("./middlewares/error.middleware");
 const userRoute = require("./routes/user.route");
 const categoryRoute = require("./routes/category.route");
 const storeRoute = require("./routes/store.route");
+const supplierRoute = require("./routes/supplier.route");
 
 /* application level connections */
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use("/user", userRoute);
 app.use("/category", categoryRoute);
 app.use("/store", storeRoute);
+app.use("/supplier", supplierRoute);
 
 /* global error handlers */
 app.use(errorHandler);
